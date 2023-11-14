@@ -25,32 +25,14 @@
 .hr {
   width: 60%;
 }
-.navbar {
-  padding: 2.5rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-}
 
-.navbar::after {
-  position: absolute;
-  content: "";
-  width: 70%;
-  border: 1px solid #000;
-  top: 100px;
-}
-
-.navbarLink {
-  margin: 0 10px;
-  font-size: 1.12rem;
-  font-weight: 600;
-  text-decoration: none;
-  color: #000;
-}
-
-.hr {
-  width: 60%;
+.navbarLogin {
+  padding: 6px 12px;
+  background-color: #000;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 400;
 }
 
 .hamburgerMenu {
