@@ -32,13 +32,21 @@ export const typeDefs = gql`
   }
 
   type Query {
-    getUserById(id: ID!): User
-    getInjuryReports(id: ID!): [InjuryReport]
+    getUserByEmail(id: ID!): User
+    getInjuryReports(
+      id: ID!
+      sortBy: String
+      searchName: String
+      injuryStart: DateTime
+      injuryEnd: DateTime
+      reportStart: DateTime
+      reportEnd: DateTime
+    ): [InjuryReport]
     getInjuryReportById(id: ID!): InjuryReport
   }
 
   type Mutation {
-    createAuth0User(id: ID!, email: String!, nickname: String!): User
+    createAuth0User(email: String!, nickname: String!): User
     createInjuryReport(report: CreateInjuryReportInput!): InjuryReport
     updateInjuryReport(report: UpdateInjuryReportInput!): InjuryReport
     deleteInjuryReport(id: ID!): InjuryReport
@@ -48,7 +56,7 @@ export const typeDefs = gql`
     reporterName: String!
     injuryDateTime: DateTime!
     userId: ID!
-    injuries: [InjuryAreaInput!]!
+    areas: [InjuryAreaInput!]!
   }
 
   input InjuryAreaInput {
@@ -62,7 +70,8 @@ export const typeDefs = gql`
   input UpdateInjuryReportInput {
     id: ID!
     reporterName: String
-    injuries: [UpdateInjuryAreaInput!]!
+    injuryDateTime: DateTime
+    areas: [UpdateInjuryAreaInput!]!
   }
 
   input UpdateInjuryAreaInput {
@@ -98,11 +107,11 @@ const DateTimeScalar = new GraphQLScalarType({
 export const resolvers = {
   DateTime: DateTimeScalar,
   Query: {
-    getUserById: async (_, { id }) => {
+    getUserByEmail: async (_, { email }) => {
       try {
         return await prisma.user.findUnique({
           where: {
-            id,
+            email,
           },
           include: {
             reports: {
@@ -116,16 +125,51 @@ export const resolvers = {
         throw new Error(`Failed to fetch user by ID: ${error.message}`);
       }
     },
-    getInjuryReports: async (_, { id }) => {
+    getInjuryReports: async (
+      _,
+      { id, searchName, injuryStart, injuryEnd, reportStart, reportEnd }
+    ) => {
       try {
-        return await prisma.injuryReport.findMany({
-          where: {
-            userId: id,
-          },
+        const filter = {
+          userId: id,
+          AND: [
+            searchName
+              ? {
+                  reporterName: {
+                    contains: searchName,
+                    mode: "insensitive",
+                  },
+                }
+              : null,
+            {
+              OR: [
+                injuryStart && injuryEnd
+                  ? { injuryDateTime: { gte: injuryStart, lte: injuryEnd } }
+                  : injuryStart
+                  ? { injuryDateTime: { gte: injuryStart } }
+                  : injuryEnd
+                  ? { injuryDateTime: { lte: injuryEnd } }
+                  : null,
+                reportStart && reportEnd
+                  ? { reportDate: { gte: reportStart, lte: reportEnd } }
+                  : reportStart
+                  ? { reportDate: { gte: reportStart } }
+                  : reportEnd
+                  ? { reportDate: { lte: reportEnd } }
+                  : null,
+              ].filter((condition) => condition),
+            },
+          ].filter((condition) => condition),
+        };
+
+        const reports = await prisma.injuryReport.findMany({
+          where: filter,
           include: {
             areas: true,
           },
         });
+
+        return reports;
       } catch (error) {
         throw new Error(`Failed to fetch injury reports: ${error.message}`);
       }
@@ -148,12 +192,19 @@ export const resolvers = {
     },
   },
   Mutation: {
-    createAuth0User: async (_, { id, email, nickname }) => {
+    createAuth0User: async (_, { email, nickname }) => {
       try {
-        // Check if the user already exists in the database
+        console.log("Creating new Auth0 user:", email, nickname);
         const existingUser = await prisma.user.findUnique({
           where: {
             email,
+          },
+          include: {
+            reports: {
+              include: {
+                areas: true,
+              },
+            },
           },
         });
 
@@ -161,15 +212,21 @@ export const resolvers = {
           return existingUser;
         }
 
-        // Create a new user
         const newUser = await prisma.user.create({
           data: {
-            id: id,
             email: email,
             nickname: nickname,
           },
+          include: {
+            reports: {
+              include: {
+                areas: true,
+              },
+            },
+          },
         });
 
+        console.log("Created new user:", newUser);
         return newUser;
       } catch (error) {
         throw new Error(`Failed to create Auth0 user: ${error.message}`);
@@ -177,20 +234,15 @@ export const resolvers = {
     },
     createInjuryReport: async (_, { report }) => {
       try {
-        // Create a new injury report along with associated areas
         const newReport = await prisma.injuryReport.create({
           data: {
             reporterName: report.reporterName,
             injuryDateTime: report.injuryDateTime,
-            userId: report.userId,
+            User: {
+              connect: { id: report.userId },
+            },
             areas: {
-              create: report.injuries.map((injury) => ({
-                areaNumber: injury.areaNumber,
-                top: injury.top,
-                left: injury.left,
-                injuryOf: injury.injuryOf,
-                injuryDetails: injury.injuryDetails,
-              })),
+              create: report.areas,
             },
           },
           include: {
@@ -205,25 +257,30 @@ export const resolvers = {
     },
     updateInjuryReport: async (_, { report }) => {
       try {
-        // Update an existing injury report
         const updatedReport = await prisma.injuryReport.update({
           where: {
             id: report.id,
           },
           data: {
             reporterName: report.reporterName,
+            injuryDateTime: report.injuryDateTime,
             areas: {
-              updateMany: report.injuries.map((injury) => ({
-                where: { id: injury.id },
+              update: report.areas.map((area) => ({
+                where: {
+                  id: area.id,
+                },
                 data: {
-                  areaNumber: injury.areaNumber,
-                  injuryOf: injury.injuryOf,
-                  top: injury.top,
-                  left: injury.left,
-                  injuryDetails: injury.injuryDetails,
+                  areaNumber: area.areaNumber,
+                  injuryOf: area.injuryOf,
+                  top: area.top,
+                  left: area.left,
+                  injuryDetails: area.injuryDetails,
                 },
               })),
             },
+          },
+          include: {
+            areas: true,
           },
         });
 
@@ -238,11 +295,7 @@ export const resolvers = {
           where: {
             id,
           },
-          include: {
-            areas: true,
-          },
         });
-
         return deletedReport;
       } catch (error) {
         throw new Error(`Failed to delete injury report: ${error.message}`);

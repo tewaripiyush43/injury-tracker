@@ -47,6 +47,20 @@
     display: none;
   }
 
+  .navbarLogin {
+    background-color: transparent;
+    color: #000;
+    border-radius: 0px;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .navbarLink {
+    /* margin: 0 5px; */
+    padding: 10px;
+    border-bottom: 1px solid #000;
+  }
+
   .hamburgerMenu {
     display: unset;
   }
@@ -60,11 +74,5 @@
     background-color: #fff;
     border: 1px solid #000;
     z-index: 1000;
-  }
-
-  .navbarLink {
-    margin: 0 5px;
-    padding: 10px;
-    border-bottom: 1px solid #000;
   }
 }

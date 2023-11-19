@@ -1,23 +1,63 @@
 .reportListItemContainer {
 }
 
-.reportListItemActions {
-  /* width: 100%; */
+.reportListContainer {
+  width: 100%;
 }
 
-/* .reportListItemAction {
-  margin: 0 5px;
+.filterContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
-.reportListTable {
-  width: 80%;
-  margin-top: 2rem;
-} */
+.row {
+  width: 70%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin-bottom: 8px;
+}
+
+.filterSection {
+  display: flex;
+  align-items: flex-start;
+  flex-flow: wrap;
+  margin-right: 16px;
+}
+
+.label {
+  margin-bottom: 4px;
+}
+
+.input,
+.select,
+.button {
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.input {
+  /* min-width: 40%; */
+}
+
+.button {
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  min-width: 20%;
+  max-width: 30%;
+}
 
 .tableContainer {
-  width: 100%;
   margin-top: 2rem;
   overflow-x: auto;
+  padding: 1rem;
 }
 
 .table {
@@ -49,21 +89,18 @@
   padding: 10px;
 }
 
-.tableActions button {
+.tableActions a {
   margin: 0 5px;
   padding: 4px 8px;
   border-radius: 5px;
+  font-size: 0.9rem;
   border: none;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .view {
   background-color: #4caf50;
-  color: #fff;
-}
-
-.update {
-  background-color: #2196f3;
   color: #fff;
 }
 

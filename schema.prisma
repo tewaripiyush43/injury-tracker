@@ -5,38 +5,37 @@ generator client {
 }
 
 datasource db {
-    provider  = "postgresql"
-    url       = env("POSTGRES_PRISMA_URL")
-    directUrl = env("POSTGRES_URL_NON_POOLING")
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-    id        String         @id @default(uuid())
+    id        String         @id @default(auto()) @map("_id") @db.ObjectId
     email     String         @unique
     nickname  String         @unique
-    createdAt DateTime       @default(now()) @map(name: "created_at")
+    createdAt DateTime       @default(now()) @map("created_at")
     reports   InjuryReport[]
 }
 
 model InjuryReport {
-    id             String   @id @default(uuid())
+    id             String   @id @default(auto()) @map("_id") @db.ObjectId
     reporterName   String
     injuryDateTime DateTime
     reportDate     DateTime @default(now())
     updatedDate    DateTime @updatedAt
-    User           User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId         String?
+    userId         String   @map("user_id") @db.ObjectId
+    User           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     areas InjuryArea[]
 }
 
 model InjuryArea {
-    id            String       @id @default(uuid())
-    areaNumber    Int
-    top           Float
-    left          Float
-    injuryOf      String
-    injuryDetails String
-    report        InjuryReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
-    reportId      String
+    id             String       @id @default(auto()) @map("_id") @db.ObjectId
+    areaNumber     Int
+    top            Float
+    left           Float
+    injuryOf       String
+    injuryDetails  String
+    injuryReportId String       @db.ObjectId
+    InjuryReport   InjuryReport @relation(fields: [injuryReportId], references: [id], onDelete: Cascade)
 }
