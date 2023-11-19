@@ -14,7 +14,7 @@ export function Actions({ reportId }) {
     useMutation(DELETE_INJURY_REPORT);
 
   const handleDelete = () => {
-    console.log("Item deleted!");
+    // console.log("Item deleted!");
     setDeletePopupOpen(false);
     deleteInjuryReport({
       variables: { id: reportId },

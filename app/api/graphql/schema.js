@@ -194,7 +194,7 @@ export const resolvers = {
   Mutation: {
     createAuth0User: async (_, { email, nickname }) => {
       try {
-        console.log("Creating new Auth0 user:", email, nickname);
+        // console.log("Creating new Auth0 user:", email, nickname);
         const existingUser = await prisma.user.findUnique({
           where: {
             email,
@@ -226,7 +226,7 @@ export const resolvers = {
           },
         });
 
-        console.log("Created new user:", newUser);
+        // console.log("Created new user:", newUser);
         return newUser;
       } catch (error) {
         throw new Error(`Failed to create Auth0 user: ${error.message}`);

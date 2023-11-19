@@ -65,7 +65,7 @@ export default function page({ params }) {
     const { data } = await updateInjuryReport({
       variables: { report: updatedReport },
     });
-    console.log("data", data);
+    // console.log("data", data);
   };
 
   const handleDeleteReport = async () => {
@@ -97,7 +97,7 @@ export default function page({ params }) {
   };
 
   useEffect(() => {
-    console.log("userData", userData);
+    // console.log("userData", userData);
     setReport({ ...report, userId: userData?.id });
   }, [userData]);
 

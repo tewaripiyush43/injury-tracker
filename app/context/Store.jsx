@@ -38,10 +38,6 @@ export const StoreProvider = ({ children }) => {
     }
   }, [user]);
 
-  useEffect(() => {
-    console.log(userData);
-  }, [userData]);
-
   const logout = () => {
     setUserData(null);
   };

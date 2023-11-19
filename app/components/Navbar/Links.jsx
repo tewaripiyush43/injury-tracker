@@ -39,9 +39,6 @@ export default function Links() {
           </Link>
         ) : (
           <Link
-            onClick={() => {
-              console.log("login Clicked");
-            }}
             className={`${styles.navbarLink} ${styles.navbarLogin}`}
             href="/api/auth/login"
           >

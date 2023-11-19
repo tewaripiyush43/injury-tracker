@@ -66,13 +66,13 @@ export default function Home() {
       areas,
     };
 
-    console.log("reportData", reportData);
+    // console.log("reportData", reportData);
     const result = await createInjuryReport({
       variables: {
         report: reportData,
       },
     });
-    console.log("result", result?.data?.createInjuryReport);
+    // console.log("result", result?.data?.createInjuryReport);
 
     setUserData((prevUserData) => ({
       ...prevUserData,
@@ -96,7 +96,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    console.log("userData", userData);
+    // console.log("userData", userData);
     setReport({ ...report, userId: userData?.id });
   }, [userData]);
 

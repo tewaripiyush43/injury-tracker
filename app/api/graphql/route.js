@@ -9,11 +9,11 @@ const server = new ApolloServer({
   resolvers,
 });
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// export const config = {
+//   api: {
+//     bodyParser: false,
+//   },
+// };
 const handler = startServerAndCreateNextHandler(server, {
   context: async (req) => ({ req }),
 });
