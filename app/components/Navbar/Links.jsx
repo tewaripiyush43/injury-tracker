@@ -30,20 +30,22 @@ export default function Links() {
           Reports
         </Link>
         {userData ? (
-          <Link
-            onClick={() => logout()}
-            className={`${styles.navbarLink} ${styles.navbarLogin}`}
-            href="/api/auth/logout"
-          >
-            Logout
-          </Link>
+          <span onClick={logout}>
+            <a
+              href="/api/auth/logout"
+              // onClick={() => logout()}
+              className={`${styles.navbarLink} ${styles.navbarLogin}`}
+            >
+              Logout
+            </a>
+          </span>
         ) : (
-          <Link
+          <a
             className={`${styles.navbarLink} ${styles.navbarLogin}`}
             href="/api/auth/login"
           >
             Login
-          </Link>
+          </a>
         )}
       </div>
     </>

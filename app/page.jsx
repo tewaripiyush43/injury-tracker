@@ -7,7 +7,8 @@ import { useMutation } from "@apollo/client";
 import { CREATE_INJURY_REPORT } from "@/app/api/graphql/queries";
 
 export default function Home() {
-  const { userData, setUserData, logout, isLoading } = useContext(StoreContext);
+  const { userData, setUserData, logout, isLoading, mutationLoading } =
+    useContext(StoreContext);
   const [createInjuryReport, { data: mutationData }] =
     useMutation(CREATE_INJURY_REPORT);
   const [report, setReport] = useState({
@@ -96,11 +97,10 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // console.log("userData", userData);
     setReport({ ...report, userId: userData?.id });
   }, [userData]);
 
-  if (isLoading) {
+  if (isLoading || mutationLoading) {
     return (
       <div className={styles.createReportContainer}>
         <h2>Loading...</h2>

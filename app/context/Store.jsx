@@ -16,8 +16,14 @@ export const StoreProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const { user, error, isLoading } = useUser();
 
-  const [createAuth0User, { data: mutationData }] =
-    useMutation(CREATE_AUTH0_USER);
+  const [
+    createAuth0User,
+    { data: mutationData, loading: mutationLoading, error: mutationError },
+  ] = useMutation(CREATE_AUTH0_USER);
+
+  if (error) {
+    console.error(error);
+  }
 
   useEffect(() => {
     const handleUserLogin = async () => {
@@ -28,7 +34,7 @@ export const StoreProvider = ({ children }) => {
             nickname: user.nickname,
           },
         });
-
+        console.log("Created new user:", result?.data?.createAuth0User);
         setUserData(result?.data?.createAuth0User);
       }
     };
@@ -36,14 +42,18 @@ export const StoreProvider = ({ children }) => {
     if (user) {
       handleUserLogin();
     }
+    console.log("User data:", userData);
   }, [user]);
 
   const logout = () => {
     setUserData(null);
+    console.log("Logging out", user, userData);
   };
 
   return (
-    <StoreContext.Provider value={{ userData, setUserData, logout, isLoading }}>
+    <StoreContext.Provider
+      value={{ userData, setUserData, logout, isLoading, mutationLoading }}
+    >
       {children}
     </StoreContext.Provider>
   );
