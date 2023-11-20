@@ -50,7 +50,8 @@ export default function Home() {
     }
   };
 
-  const handleCreateReport = async () => {
+  const handleCreateReport = async (e) => {
+    e.preventDefault();
     const areas = injuries.map((injury) => {
       return {
         areaNumber: injury.areaNumber,
@@ -117,7 +118,10 @@ export default function Home() {
   }
 
   return (
-    <div className={styles.createReportContainer}>
+    <form
+      className={styles.createReportContainer}
+      onSubmit={handleCreateReport}
+    >
       <h2>Create Report</h2>
       <div className={styles.reportDetails}>
         <div className={styles.reportInput}>
@@ -129,6 +133,7 @@ export default function Home() {
             type="text"
             name="reporterName"
             placeholder="John Doe"
+            required
             value={report.reporterName}
             onChange={(e) => handleInputChange(e)}
           />
@@ -141,6 +146,7 @@ export default function Home() {
             className={styles.reportInputField}
             type="datetime-local"
             name="injuryDateTime"
+            required
             value={report.injuryDateTime}
             onChange={(e) => handleInputChange(e)}
           />
@@ -181,6 +187,7 @@ export default function Home() {
                   type="text"
                   name="injuryOf"
                   value={injury.injuryOf}
+                  required
                   onChange={(e) => handleInputChange(e, index)}
                 />
               </div>
@@ -191,6 +198,7 @@ export default function Home() {
                   name="injuryDetails"
                   rows={10}
                   value={injury.injuryDetails}
+                  required
                   onChange={(e) => handleInputChange(e, index)}
                 />
               </div>
@@ -206,7 +214,7 @@ export default function Home() {
               Reset Report
             </button>
             <button
-              onClick={handleCreateReport}
+              type="submit"
               className={`${styles.createButton} ${styles.button} `}
             >
               Create Report
@@ -214,6 +222,6 @@ export default function Home() {
           </div>
         )}
       </div>
-    </div>
+    </form>
   );
 }

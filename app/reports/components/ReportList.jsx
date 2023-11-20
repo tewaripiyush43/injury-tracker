@@ -18,7 +18,6 @@ export default function ReportList() {
     reportStart: null,
     reportEnd: null,
   });
-  // const [skipInitialFetch, setSkipInitialFetch] = useState(false);
 
   const { data, loading, error, refetch } = useQuery(GET_INJURY_REPORTS, {
     variables: {
@@ -52,6 +51,8 @@ export default function ReportList() {
     }).then((data) => {
       setReports(data?.data?.getInjuryReports);
     });
+
+    // console.log("yo");
   };
 
   if (loading) return <p>Loading...</p>;
@@ -218,7 +219,7 @@ export default function ReportList() {
                     })}
                   </td>
                   <td className={styles.tableData}>
-                    <Actions reportId={report.id} />
+                    <Actions reportId={report.id} onDelete={handleSearch} />
                   </td>
                 </tr>
               ))

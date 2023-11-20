@@ -18,7 +18,8 @@ export default function page({ params }) {
   const [report, setReport] = useState({});
   const [isDeletePopupOpen, setDeletePopupOpen] = useState(false);
 
-  const { userData, setUserData, logout } = useContext(StoreContext);
+  const { userData, setUserData, logout, isLoading, mutationLoading } =
+    useContext(StoreContext);
   const [editable, setEditable] = useState(false);
   const { data, loading, error } = useQuery(GET_INJURY_REPORT_BY_ID, {
     variables: { id: params.id },
@@ -101,7 +102,7 @@ export default function page({ params }) {
     setReport({ ...report, userId: userData?.id });
   }, [userData]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading || isLoading || mutationLoading) return <div>Loading...</div>;
   if (error) return <div>Error! {error.message}</div>;
   if (!userData) return <div>Please login too see report</div>;
 
@@ -115,8 +116,8 @@ export default function page({ params }) {
               title="Save Report"
               className={`${styles.reportButton} ${styles.reportButtonUpdate}`}
               onClick={() => {
-                setEditable(!editable);
                 handleUpdateReport();
+                setEditable(!editable);
               }}
             />
           ) : (
@@ -222,7 +223,7 @@ export default function page({ params }) {
         })}
         <div className={styles.reportBottomButtonsContainer}>
           {editable && (
-            <div
+            <button
               className={styles.reportBottomButton}
               title="Save Report"
               onClick={() => {
@@ -232,7 +233,7 @@ export default function page({ params }) {
             >
               <p>Update Report</p>
               <SaveOutlined className={`${styles.reportButton}`} />
-            </div>
+            </button>
           )}
           <div
             className={styles.reportBottomButton}

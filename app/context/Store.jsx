@@ -21,9 +21,9 @@ export const StoreProvider = ({ children }) => {
     { data: mutationData, loading: mutationLoading, error: mutationError },
   ] = useMutation(CREATE_AUTH0_USER);
 
-  if (error) {
-    console.error(error);
-  }
+  // if (error) {
+  //   console.error(error);
+  // }
 
   useEffect(() => {
     const handleUserLogin = async () => {
@@ -34,7 +34,7 @@ export const StoreProvider = ({ children }) => {
             nickname: user.nickname,
           },
         });
-        console.log("Created new user:", result?.data?.createAuth0User);
+        // console.log("Created new user:", result?.data?.createAuth0User);
         setUserData(result?.data?.createAuth0User);
       }
     };
@@ -42,12 +42,12 @@ export const StoreProvider = ({ children }) => {
     if (user) {
       handleUserLogin();
     }
-    console.log("User data:", userData);
+    // console.log("User data:", userData);
   }, [user]);
 
   const logout = () => {
     setUserData(null);
-    console.log("Logging out", user, userData);
+    // console.log("Logging out", user, userData);
   };
 
   return (

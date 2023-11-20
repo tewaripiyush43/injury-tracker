@@ -1,12 +1,21 @@
 .createReportContainer {
   width: 100%;
   text-align: center;
-  margin-top: 30px;
+  margin-top: 130px;
 }
 
 .reportButton {
   display: inline;
   margin-left: 15px;
+  background-color: transparent;
+  font-size: 1.3rem;
+  font-weight: 900;
+}
+
+.reportBtn {
+  margin: 0;
+  outline: none;
+  border: none;
 }
 
 .reportButtonUpdate :hover {
@@ -175,6 +184,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 5px 10px;
+  font-size: 0.95rem;
   border-radius: 5px;
   color: #ffffff;
   margin-block: 10px;
@@ -183,6 +193,8 @@
 
 .reportBottomButton:first-child {
   background-color: green;
+  outline: none;
+  border: none;
 }
 
 .reportBottomButton:last-child {
