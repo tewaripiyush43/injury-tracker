@@ -16,7 +16,7 @@ To run this project in the development server, you need to create a MongoDB data
 ```bash
 DATABASE_URL=mongodb+srv://<username>:<password>@cluster0.tqn6fhs.mongodb.net/<database_name>?retryWrites=true&w=majority
 ```
-then you will need to update the Apollo client URL with your localhost URL in `lib/apolloClient` e.g. `http://localhost:3000/`
+then you will need to update the Apollo client URL with your localhost URL in `lib/apolloClient` e.g. `http://localhost:3000/api/graphql`
 
 after that, you will need to create an account on Auth0 and follow these instructions till `Configure the SDK` on [https://auth0.com/docs/quickstart/webapp/nextjs](https://auth0.com/docs/quickstart/webapp/nextjs) and add the AUTH URLs in your env file.
 
