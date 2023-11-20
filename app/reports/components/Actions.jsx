@@ -4,7 +4,7 @@ import { useState } from "react";
 import styles from "./ReportList.module.css";
 import DeleteConfirmationPopup from "./DeleteConfirmationPopup";
 import Link from "next/link";
-export const BASE_URL = process.env.NEXT_PUBLIC_URL || "http://localhost:3000";
+// export const BASE_URL = process.env.NEXT_PUBLIC_URL || "http://localhost:3000";
 import { useMutation } from "@apollo/client";
 import { DELETE_INJURY_REPORT } from "@/app/api/graphql/queries";
 
@@ -23,7 +23,10 @@ export function Actions({ reportId }) {
 
   return (
     <span className={styles.tableActions}>
-      <Link href={`${BASE_URL}/reports/${reportId}`} className={styles.view}>
+      <Link
+        href={`https://injury-tracker-kappa.vercel.app/reports/${reportId}`}
+        className={styles.view}
+      >
         View
       </Link>
       <Link
